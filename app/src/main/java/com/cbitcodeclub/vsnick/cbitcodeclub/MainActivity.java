@@ -1,13 +1,19 @@
 package com.cbitcodeclub.vsnick.cbitcodeclub;
 
 import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -54,6 +60,8 @@ public class MainActivity extends AppCompatActivity
                 .add(R.id.fragment_container, newsFragment).commit();
 
         startService(new Intent(getBaseContext(), NotificationService.class));
+
+        checkUpdate();
     }
 
     @Override
@@ -99,37 +107,67 @@ public class MainActivity extends AppCompatActivity
         }  else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }else if(id == R.id.nav_update){
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("app");
-
-
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String apk = dataSnapshot.child("url").getValue(String.class);
-                    Log.d("hi", "onNavigationItemSelected: "+apk);
-                    DownloadManager downloadManager;
-                    downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
-                    Uri Download_Uri = Uri.parse(apk);
-                    DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
-                    request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-                    request.setAllowedOverRoaming(false);
-                    request.setTitle("CCC.apk");
-                    request.setMimeType(".apk");
-                    request.setDescription("Updating..");
-                    request.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_DOWNLOADS,"update.apk");
-                    downloadManager.enqueue(request);
-                    startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError error) {
-                }
-            });
+            appUpdate();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void appUpdate(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("app");
+
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String apk = dataSnapshot.child("url").getValue(String.class);
+                DownloadManager downloadManager;
+                downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+                Uri Download_Uri = Uri.parse(apk);
+                DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
+                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
+                request.setAllowedOverRoaming(false);
+                request.setTitle("CCC App Update.apk");
+                request.setMimeType("application/vnd.android.package-archive");
+                request.setDescription("Open to update");
+                request.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_DOWNLOADS,"/ccc/");
+                downloadManager.enqueue(request);
+
+                BroadcastReceiver onComplete=new BroadcastReceiver() {
+                    public void onReceive(Context ctxt, Intent intent) {
+                        startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+                    }
+                };
+                registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+    void checkUpdate(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("app");
+        myRef.child("version").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String version = (dataSnapshot.getValue(String.class));
+                //Log.d("versiom", "onDataChange: "+BuildConfig.VERSION_NAME);
+                if(BuildConfig.VERSION_NAME!=version){
+                    appUpdate();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }
