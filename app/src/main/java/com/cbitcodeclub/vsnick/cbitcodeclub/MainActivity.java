@@ -11,9 +11,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -27,6 +29,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.cbitcodeclub.vsnick.cbitcodeclub.Objects.Post;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
         startService(new Intent(getBaseContext(), NotificationService.class));
 
-        checkUpdate();
+        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
     }
 
     @Override
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
             return true;
         }
 
@@ -102,12 +106,35 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == 1){
+        if (id == R.id.nav_share){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("app");
+            myRef.child("url").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    try {
+                        String apk = dataSnapshot.getValue(String.class);
+                        String message ="*Cbit Code Club App*:"+apk;
+                        Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                        whatsappIntent.setType("text/plain");
+                        whatsappIntent.setPackage("com.whatsapp");
+                        whatsappIntent.putExtra(Intent.EXTRA_TEXT,message);
+                        startActivity(whatsappIntent);
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.newsCoordinatorLayout);
+                        Snackbar.make(coordinatorLayout,"Whatsapp Not Installed",Snackbar.LENGTH_SHORT).show();
+                    }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }  else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }else if(id == R.id.nav_update){
-            appUpdate();
+            checkUpdate();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -157,9 +184,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String version = (dataSnapshot.getValue(String.class));
-                //Log.d("versiom", "onDataChange: "+BuildConfig.VERSION_NAME);
-                if(BuildConfig.VERSION_NAME!=version){
+                Log.d("versiom", ""+(BuildConfig.VERSION_NAME.equals(version)));
+                if(!BuildConfig.VERSION_NAME.equals(version)){
                     appUpdate();
+                } else{
+                    CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinatorLayout);
+                    Snackbar.make(layout,"Upto date",Snackbar.LENGTH_LONG).show();
                 }
             }
 

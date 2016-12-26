@@ -43,7 +43,7 @@ public class NotificationService extends Service {
 
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(getApplicationContext())
-                                    .setSmallIcon(R.drawable.ic_menu_camera)
+                                    .setSmallIcon(R.mipmap.ic_launcher)
                                     .setContentTitle(dataSnapshot.child("title").getValue(String.class));
                                     //.setContentText(dataSnapshot.child("content").getValue(String.class));
                     Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);

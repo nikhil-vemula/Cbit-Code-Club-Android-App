@@ -77,13 +77,13 @@ public class CCCNewsFragment extends Fragment {
         loading = getActivity().findViewById(R.id.loading);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("notifications");
-        posts.clear();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Post post;
+                posts.clear();
                 for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
                     String title = (String) messageSnapshot.child("title").getValue();
                     String desc = (String) messageSnapshot.child("content").getValue();
