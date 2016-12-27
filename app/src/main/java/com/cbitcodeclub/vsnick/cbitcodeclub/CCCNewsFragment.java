@@ -1,7 +1,11 @@
 package com.cbitcodeclub.vsnick.cbitcodeclub;
 
 
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -56,20 +60,25 @@ public class CCCNewsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        CoordinatorLayout layout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
         ConnectivityManager cm =
                 (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-
         if(isConnected){
             loadPosts();
         }
         else{
-            CoordinatorLayout layout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
-           Snackbar.make(layout,"No Internet",Snackbar.LENGTH_INDEFINITE).show();
+            Snackbar.make(layout,"No internet",Snackbar.LENGTH_LONG).show();
         }
+        BroadcastReceiver onComplete=new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                loadPosts();
+            }
+        };
+        getActivity().getApplicationContext().registerReceiver(onComplete, new IntentFilter(cm.CONNECTIVITY_ACTION));
     }
 
     void loadPosts(){

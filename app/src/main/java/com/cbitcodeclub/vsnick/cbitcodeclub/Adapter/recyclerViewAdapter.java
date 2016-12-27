@@ -71,7 +71,6 @@ public class recyclerViewAdapter extends RecyclerView.Adapter<recyclerViewAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.title.setText(data.get(position).getTitle());
         String desc = data.get(position).getDescription();
-        Log.d(TAG, "onBindViewHolder: "+Html.fromHtml(desc).toString());
         holder.description.setText(Html.fromHtml(desc));
         holder.tag.setText(data.get(position).getTag());
         holder.tag.setTextColor(data.get(position).getTagColor());

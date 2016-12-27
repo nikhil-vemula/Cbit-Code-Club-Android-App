@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity
 
         startService(new Intent(getBaseContext(), NotificationService.class));
 
-        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
     }
 
     @Override
