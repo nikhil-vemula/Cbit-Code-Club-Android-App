@@ -17,8 +17,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
+
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -109,7 +111,38 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_share){
+
+        if (id == 1){
+
+        }
+        else if(id == R.id.news){
+            removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container,new NewsFragment(),"news");
+           // fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();}
+
+        else if (id == R.id.nav_settings) {
+            startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
+        }
+
+        else if(id == R.id.webDevelopmentNav){
+            removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container,new WebDevelopment(),"webdev");
+            fragmentTransaction.commit();
+        }
+        else if(id == R.id.appDevelopmentNav){
+            removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container,new AppDevelopment(),"appdev");
+            fragmentTransaction.commit();
+        }
+        else if (id == R.id.nav_share){
+
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("app");
             myRef.child("url").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -138,27 +171,13 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }else if(id == R.id.nav_update){
             checkUpdate();
-        }else if(id == R.id.nav_news){
-            //removeAllFragments();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container,new NewsFragment());
-            fragmentTransaction.commit();
-
-        }else if(id == R.id.nav_web){
-            //removeAllFragments();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container,new WebDevFragment());
-            fragmentTransaction.commit();
-
-        }else if(id == R.id.nav_app){
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     void appUpdate(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -218,6 +237,7 @@ public class MainActivity extends AppCompatActivity
         });
 
     }
+
     void removeAllFragments(){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -229,7 +249,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.remove(frag);
         if((frag = fragmentManager.findFragmentByTag("appdev"))!=null)
             fragmentTransaction.remove(frag);
-        fragmentTransaction.commit();
 
+        fragmentTransaction.commitNow();
     }
 }
