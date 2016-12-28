@@ -1,10 +1,16 @@
 package com.cbitcodeclub.vsnick.cbitcodeclub;
 
 
-import android.app.Activity;
+
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -39,7 +45,7 @@ public class CCCNewsFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View loading;
-    String TAG="dbg";
+
 
     public CCCNewsFragment() {
         // Required empty public constructor
@@ -113,44 +119,57 @@ public class CCCNewsFragment extends Fragment {
         Log.d(TAG, "onViewCreated: ");
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG,"onResume");
+
+        CoordinatorLayout layout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
+
         ConnectivityManager cm =
                 (ConnectivityManager)getActivity().getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-
         if(isConnected){
             loadPosts();
         }
         else{
-            CoordinatorLayout layout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinatorLayout);
-            Snackbar.make(layout,"No Internet",Snackbar.LENGTH_INDEFINITE).show();
+
+            Snackbar.make(layout,"No internet",Snackbar.LENGTH_LONG).show();
+
         }
+        BroadcastReceiver onComplete=new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                loadPosts();
+            }
+        };
+        getActivity().getApplicationContext().registerReceiver(onComplete, new IntentFilter(cm.CONNECTIVITY_ACTION));
     }
+
+
 
     void loadPosts(){
         final ArrayList<Post> posts = new ArrayList<Post>();
         loading = getActivity().findViewById(R.id.loading);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("notifications");
-        posts.clear();
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 Post post;
+                posts.clear();
                 for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
                     String title = (String) messageSnapshot.child("title").getValue();
                     String desc = (String) messageSnapshot.child("content").getValue();
                     String tag = (String) messageSnapshot.child("tag").getValue();
                     post = new Post(title, desc, tag);
                     posts.add(post);
+
                     mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view);
                     //mRecyclerView.setHasFixedSize(true);
                     mLayoutManager = new LinearLayoutManager(getActivity());

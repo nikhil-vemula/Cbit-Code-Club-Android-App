@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -29,14 +30,20 @@ public class NewsItem extends AppCompatActivity {
         final String tag = bundle.getString("tag");
         setTitle(title);
         TextView textView = (TextView) findViewById(R.id.desc);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setText(Html.fromHtml(desc));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String message = "*"+title+"*\n"+desc;
-                Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
+                String message = ""+title+"\n"+Html.fromHtml(desc);
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+                /*Intent whatsappIntent = new Intent(Intent.ACTION_SEND);
                 whatsappIntent.setType("text/plain");
                 whatsappIntent.setPackage("com.whatsapp");
                 whatsappIntent.putExtra(Intent.EXTRA_TEXT,message);
@@ -45,7 +52,7 @@ public class NewsItem extends AppCompatActivity {
                 } catch (android.content.ActivityNotFoundException ex) {
                     CoordinatorLayout coordinatorLayout = (CoordinatorLayout) findViewById(R.id.newsCoordinatorLayout);
                     Snackbar.make(coordinatorLayout,"Whatsapp Not Installed",Snackbar.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 

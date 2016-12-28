@@ -40,6 +40,13 @@ public class NewsFragment extends Fragment{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
         TabsPageAdapter tabsPageAdapter = new TabsPageAdapter(getActivity().getSupportFragmentManager());
         viewPager = (ViewPager) getActivity().findViewById(R.id.viewPager);
         viewPager.setAdapter(tabsPageAdapter);
