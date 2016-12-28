@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity
 
         NewsFragment newsFragment = new NewsFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, newsFragment).commit();
+                .add(R.id.fragment_container, newsFragment,"news").commit();
 
         startService(new Intent(getBaseContext(), NotificationService.class));
     }
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
             return true;
         }
 
@@ -96,9 +100,35 @@ public class MainActivity extends AppCompatActivity
 
         if (id == 1){
 
-        }  else if (id == R.id.nav_settings) {
+        }
+        else if(id == R.id.news){
+            removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container,new NewsFragment(),"news");
+           // fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();}
+
+        else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
-        }else if(id == R.id.nav_update){
+        }
+
+        else if(id == R.id.webDevelopmentNav){
+            removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container,new WebDevelopment(),"webdev");
+            fragmentTransaction.commit();
+        }
+        else if(id == R.id.appDevelopmentNav){
+            removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container,new AppDevelopment(),"appdev");
+            fragmentTransaction.commit();
+        }
+
+        else if(id == R.id.nav_update){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("app");
 
@@ -131,5 +161,20 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    void removeAllFragments(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment frag;
+        if((frag = fragmentManager.findFragmentByTag("news"))!=null)
+            fragmentTransaction.remove(frag);
+        if((frag = fragmentManager.findFragmentByTag("webdev"))!=null)
+            fragmentTransaction.remove(frag);
+        if((frag = fragmentManager.findFragmentByTag("appdev"))!=null)
+            fragmentTransaction.remove(frag);
+        fragmentTransaction.commitNow();
+
     }
 }
