@@ -14,6 +14,9 @@ import android.os.Environment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.util.Log;
@@ -38,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
         NewsFragment newsFragment = new NewsFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, newsFragment).commit();
+                .add(R.id.fragment_container, newsFragment,"news").commit();
 
         startService(new Intent(getBaseContext(), NotificationService.class));
 
@@ -134,6 +138,21 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(),SettingsActivity.class));
         }else if(id == R.id.nav_update){
             checkUpdate();
+        }else if(id == R.id.nav_news){
+            //removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container,new NewsFragment());
+            fragmentTransaction.commit();
+
+        }else if(id == R.id.nav_web){
+            //removeAllFragments();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container,new WebDevFragment());
+            fragmentTransaction.commit();
+
+        }else if(id == R.id.nav_app){
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -197,6 +216,20 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+    }
+    void removeAllFragments(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Fragment frag;
+        if((frag = fragmentManager.findFragmentByTag("news"))!=null)
+            fragmentTransaction.remove(frag);
+        if((frag = fragmentManager.findFragmentByTag("webdev"))!=null)
+            fragmentTransaction.remove(frag);
+        if((frag = fragmentManager.findFragmentByTag("appdev"))!=null)
+            fragmentTransaction.remove(frag);
+        fragmentTransaction.commit();
 
     }
 }

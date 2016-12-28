@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -31,8 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import static android.content.ContentValues.TAG;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +42,7 @@ public class CCCNewsFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private View loading;
+    String TAG = "dbg";
 
     public CCCNewsFragment() {
         // Required empty public constructor
@@ -81,6 +81,8 @@ public class CCCNewsFragment extends Fragment {
         getActivity().getApplicationContext().registerReceiver(onComplete, new IntentFilter(cm.CONNECTIVITY_ACTION));
     }
 
+
+
     void loadPosts(){
         final ArrayList<Post> posts = new ArrayList<Post>();
         loading = getActivity().findViewById(R.id.loading);
@@ -99,6 +101,7 @@ public class CCCNewsFragment extends Fragment {
                     String tag = (String) messageSnapshot.child("tag").getValue();
                     post = new Post(title, desc, tag);
                     posts.add(post);
+
                     mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view);
                     //mRecyclerView.setHasFixedSize(true);
                     mLayoutManager = new LinearLayoutManager(getActivity());

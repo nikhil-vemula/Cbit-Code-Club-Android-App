@@ -5,8 +5,14 @@
         android:id="@+id/menu_list"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/news"
+            android:id="@+id/nav_news"
             android:title="News" />
+        <item
+            android:id="@+id/nav_web"
+            android:title="Web Development" />
+        <item
+            android:id="@+id/nav_app"
+            android:title="App Development" />
 
     </group>
     <group android:id="@+id/group_settings"

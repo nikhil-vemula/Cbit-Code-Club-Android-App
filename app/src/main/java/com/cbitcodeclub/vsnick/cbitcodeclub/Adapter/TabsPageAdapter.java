@@ -3,6 +3,7 @@ package com.cbitcodeclub.vsnick.cbitcodeclub.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import com.cbitcodeclub.vsnick.cbitcodeclub.CCCNewsFragment;
@@ -12,7 +13,7 @@ import com.cbitcodeclub.vsnick.cbitcodeclub.CbitNewsFragment;
  * Created by vsnick on 12/25/2016.
  */
 
-public class TabsPageAdapter extends FragmentPagerAdapter {
+public class TabsPageAdapter extends FragmentStatePagerAdapter {
     private static final String TAG ="TabPagerAdapter" ;
 
     public TabsPageAdapter(FragmentManager fm) {
