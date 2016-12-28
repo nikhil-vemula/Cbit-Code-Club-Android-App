@@ -42,6 +42,7 @@ public class AppDevTutorialsRecycler extends RecyclerView.Adapter<AppDevTutorial
     public void onBindViewHolder(AppDevTutorialsHolder holder, int position) {
         holder.title.setText(appDevTuts.get(position).getTitle());
         holder.tag.setText(appDevTuts.get(position).getTag());
+        holder.desc.setText(appDevTuts.get(position).getDesc());
         String tagval = appDevTuts.get(position).getTag();
         if(tagval == "html"){
             holder.tag.setTextColor(Color.BLUE);
@@ -62,11 +63,12 @@ public class AppDevTutorialsRecycler extends RecyclerView.Adapter<AppDevTutorial
 
     public static class AppDevTutorialsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView title,tag;
+        public TextView title,tag,desc;
         public AppDevTutorialsHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.appTutTitleID);
             tag = (TextView)itemView.findViewById(R.id.appTagID);
+            desc = (TextView)itemView.findViewById(R.id.appDescID);
             itemView.setOnClickListener(this);
         }
 

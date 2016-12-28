@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.cbitcodeclub.vsnick.cbitcodeclub.AppTutorialsFragment;
+import com.cbitcodeclub.vsnick.cbitcodeclub.CbitNewsFragment;
 import com.cbitcodeclub.vsnick.cbitcodeclub.TutorialsFragment;
 
 /**
@@ -23,7 +24,7 @@ public class AppDevTabsPageAdapter extends FragmentStatePagerAdapter{
             case 0:
                 return new AppTutorialsFragment();
             case 1:
-                return new AppTutorialsFragment();
+                return new CbitNewsFragment();
         }
         return null;
     }

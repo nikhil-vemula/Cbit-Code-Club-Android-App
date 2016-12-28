@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#ffffff"
     tools:context="com.cbitcodeclub.vsnick.cbitcodeclub.SplashScreen">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
@@ -29,8 +29,10 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:layout_gravity="right|top"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="132dp">
 
         <LinearLayout
             android:id="@+id/fullscreen_content_controls"
@@ -42,28 +44,28 @@
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-            <Button
-                android:id="@+id/dummy_button"
-                style="?metaButtonBarButtonStyle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/dummy_button" />
-
         </LinearLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="271dp"
             android:layout_height="wrap_content"
             android:src="@drawable/logo3dlarge"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="34dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:id="@+id/imageView2"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_alignTop="@+id/fullscreen_content"
+            android:layout_centerHorizontal="true" />
+
     </FrameLayout>
+
+    <Button
+        android:id="@+id/dummy_button"
+        style="?metaButtonBarButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/dummy_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
