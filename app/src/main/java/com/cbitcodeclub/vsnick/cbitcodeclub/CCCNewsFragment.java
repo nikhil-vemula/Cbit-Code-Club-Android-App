@@ -61,8 +61,11 @@ public class CCCNewsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_cccnews, container, false);
     }
 
-
-
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view);
+    }
 
     @Override
     public void onResume() {
@@ -113,8 +116,6 @@ public class CCCNewsFragment extends Fragment {
                     String tag = (String) messageSnapshot.child("tag").getValue();
                     post = new Post(title, desc, tag);
                     posts.add(post);
-
-                    mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.my_recycler_view);
                     //mRecyclerView.setHasFixedSize(true);
                     mLayoutManager = new LinearLayoutManager(getActivity());
                     mRecyclerView.setLayoutManager(mLayoutManager);

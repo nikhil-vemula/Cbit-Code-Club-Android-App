@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.cbitcodeclub.vsnick.cbitcodeclub.Objects.AppDevTutorial;
 import com.cbitcodeclub.vsnick.cbitcodeclub.Objects.WebDevTutorial;
 import com.cbitcodeclub.vsnick.cbitcodeclub.R;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.ArrayList;
 
@@ -77,7 +78,11 @@ public class AppDevTutorialsRecycler extends RecyclerView.Adapter<AppDevTutorial
         public void onClick(View view) {
             int position = getAdapterPosition();
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(appDevTuts.get(position).getUrl()));
-            context.startActivity(browserIntent);
+            try {
+                context.startActivity(browserIntent);
+            }catch (Exception e){
+                FirebaseCrash.log("Intent not found");
+            }
         }
     }
 }
