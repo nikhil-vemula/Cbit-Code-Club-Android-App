@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.cbitcodeclub.vsnick.cbitcodeclub.Objects.WebDevTutorial;
 import com.cbitcodeclub.vsnick.cbitcodeclub.R;
+import com.cbitcodeclub.vsnick.cbitcodeclub.TutorialActivity;
 
 import java.util.ArrayList;
 
@@ -76,8 +77,9 @@ public class WebDevTutorialsRecycler extends RecyclerView.Adapter<WebDevTutorial
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(webDevTuts.get(position).getUrl()));
-            context.startActivity(browserIntent);
+            Intent intent = new Intent(context, TutorialActivity.class);
+            intent.putExtra("post",webDevTuts.get(getAdapterPosition()));
+            context.startActivity(intent);
         }
     }
 }

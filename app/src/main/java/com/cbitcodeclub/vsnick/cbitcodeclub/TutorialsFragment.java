@@ -71,6 +71,7 @@ public class TutorialsFragment extends Fragment {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
                     WebDevTutorial webDevTutorial;
+                    tutorials.clear();
                     for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
                         String desc = (String) messageSnapshot.child("desc").getValue();
                         String tag = (String) messageSnapshot.child("tag").getValue();
@@ -78,7 +79,6 @@ public class TutorialsFragment extends Fragment {
                         String url = (String) messageSnapshot.child("url").getValue();
                        webDevTutorial = new WebDevTutorial(desc,tag,title,url);
                         tutorials.add(webDevTutorial);
-
                         mRecyclerView = (RecyclerView) getActivity().findViewById(R.id.web_tut_rv);
                         mLayoutManager = new LinearLayoutManager(getActivity());
                         mRecyclerView.setLayoutManager(mLayoutManager);

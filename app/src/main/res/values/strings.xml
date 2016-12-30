@@ -178,5 +178,6 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="title_activity_web_dev_tutorials_item">WebDevTutorialsItem</string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
 
 </resources>

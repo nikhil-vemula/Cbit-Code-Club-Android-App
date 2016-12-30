@@ -10,13 +10,14 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
+        android:theme="@style/AppTheme">
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".NewsItem"
             android:label="@string/title_activity_news_item"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -27,6 +28,7 @@
             android:exported="false" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".SplashScreen"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_splash_screen"
@@ -38,6 +40,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -52,6 +55,11 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".TutorialActivity"
+            android:label="@string/title_activity_tutorial"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

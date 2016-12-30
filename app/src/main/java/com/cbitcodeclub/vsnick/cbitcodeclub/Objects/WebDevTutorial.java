@@ -1,12 +1,19 @@
 package com.cbitcodeclub.vsnick.cbitcodeclub.Objects;
 
+import android.net.Uri;
+
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by mdaij on 12/27/2016.
  */
-public class WebDevTutorial {
-    private String desc,tag,title,url;
+public class WebDevTutorial implements Serializable {
+    private String desc,tag,title;
+    String url;
 
     public String getDesc() {
         return desc;
